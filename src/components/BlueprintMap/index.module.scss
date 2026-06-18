@@ -1,11 +1,126 @@
 @use '@/styles/variables.scss' as *;
 
+@keyframes pulseGlow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
 .blueprintContainer {
   width: 100%;
   background: $color-bg-card-deep;
   border-radius: $radius-lg;
   overflow: hidden;
   border: 1rpx solid $color-border;
+  position: relative;
+}
+
+.playbackBar {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
+  background: linear-gradient(135deg, rgba(123, 47, 253, 0.15) 0%, rgba(0, 240, 255, 0.1) 100%);
+  border-bottom: 1rpx solid $color-border;
+}
+
+.playBtn {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: $radius-round;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4rpx 12rpx rgba(123, 47, 253, 0.4);
+  transition: all $transition-fast;
+
+  &:active {
+    transform: scale(0.92);
+  }
+
+  &.playing {
+    background: linear-gradient(135deg, $color-accent-orange 0%, #FF8C00 100%);
+    box-shadow: 0 4rpx 12rpx rgba(255, 176, 32, 0.4);
+  }
+}
+
+.playBtnText {
+  font-size: 24rpx;
+  color: $color-text-white;
+  line-height: 1;
+  margin-left: 2rpx;
+}
+
+.playing .playBtnText {
+  margin-left: 0;
+}
+
+.progressBar {
+  flex: 1;
+  height: 8rpx;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: $radius-round;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, $color-primary, $color-accent-cyan);
+  border-radius: $radius-round;
+  transition: width $transition-base;
+}
+
+.progressDot {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: $radius-round;
+  background: rgba(255, 255, 255, 0.3);
+  border: 2rpx solid rgba(255, 255, 255, 0.1);
+  transition: all $transition-fast;
+
+  &.progressDotActive {
+    background: $color-accent-cyan;
+    border-color: $color-bg-page;
+    box-shadow: 0 0 8rpx $color-accent-cyan;
+  }
+
+  &:active {
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+}
+
+.resetBtn {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: $radius-round;
+  background: $color-bg-card-deep;
+  border: 1rpx solid $color-border;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.resetBtnText {
+  font-size: 28rpx;
+  color: $color-text-tertiary;
+  line-height: 1;
+}
+
+.playbackStepText {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  font-family: monospace;
+  min-width: 60rpx;
+  text-align: right;
 }
 
 .scrollContainer {
@@ -49,6 +164,17 @@
   align-items: center;
   justify-content: center;
   border: 2rpx solid $color-bg-page;
+  transition: all $transition-fast;
+
+  &.dotActive {
+    border-color: $color-text-white;
+    z-index: 5;
+  }
+
+  &.dotPulse {
+    z-index: 4;
+    animation: pulseGlow 0.8s ease-in-out infinite;
+  }
 }
 
 .trailDotText {
@@ -68,11 +194,16 @@
   align-items: center;
   justify-content: center;
   z-index: 2;
-  transition: all $transition-fast;
+  transition: all $transition-base;
 
   &.selected {
     border-width: 3rpx;
     transform: scale(1.02);
+  }
+
+  &.roomHighlight {
+    border-width: 3rpx;
+    z-index: 3;
   }
 
   &:active {
@@ -116,6 +247,79 @@
   font-size: 20rpx;
   color: $color-text-white;
   font-weight: $font-weight-bold;
+}
+
+.pointPopup {
+  position: absolute;
+  z-index: 10;
+  width: 340rpx;
+  background: linear-gradient(135deg, rgba(26, 26, 31, 0.98) 0%, rgba(18, 18, 23, 0.98) 100%);
+  border: 1rpx solid $color-primary;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.6), 0 0 16rpx rgba(123, 47, 253, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.pointPopup::after {
+  content: '';
+  position: absolute;
+  bottom: -14rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 14rpx solid transparent;
+  border-right: 14rpx solid transparent;
+  border-top: 14rpx solid rgba(26, 26, 31, 0.98);
+}
+
+.popupHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+  padding-bottom: $spacing-sm;
+  border-bottom: 1rpx solid $color-divider;
+}
+
+.popupRoom {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.popupTime {
+  font-size: $font-size-xs;
+  color: $color-accent-cyan;
+  font-family: monospace;
+}
+
+.popupTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+  margin-bottom: $spacing-sm;
+}
+
+.popupNote {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.6;
+  margin-bottom: $spacing-sm;
+  display: block;
+}
+
+.popupPlayer {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+  text-align: right;
+  display: block;
+}
+
+.popupArrow {
+  display: none;
 }
 
 .legend {

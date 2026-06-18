@@ -6,32 +6,88 @@
   padding-bottom: 200rpx;
 }
 
-.header {
+.sessionBar {
   background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
   padding: $spacing-lg $page-padding;
   margin: 0 (-$page-padding);
   margin-bottom: $spacing-lg;
 }
 
-.playerRow {
+.sessionRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: $spacing-md;
 }
 
-.playerName {
+.sessionName {
   font-size: $font-size-lg;
   font-weight: $font-weight-semibold;
   color: $color-text-white;
+  flex: 1;
+  margin-right: $spacing-sm;
+  @include text-ellipsis;
 }
 
-.sessionTime {
+.sessionActions {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.sessionIconBtn {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: $radius-md;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:active {
+    background: rgba(255, 255, 255, 0.25);
+  }
+}
+
+.sessionIconText {
+  font-size: 28rpx;
+  color: $color-text-white;
+  line-height: 1;
+}
+
+.sessionMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.playerTag {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: 8rpx 16rpx;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: $radius-round;
+}
+
+.playerDot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: $radius-round;
+  background: $color-accent-green;
+}
+
+.playerText {
+  font-size: $font-size-sm;
+  color: $color-text-white;
+}
+
+.durationText {
   font-size: $font-size-sm;
   color: rgba(255, 255, 255, 0.7);
 }
 
 .currentRoom {
+  margin-top: $spacing-md;
   background: rgba(255, 255, 255, 0.15);
   border-radius: $radius-md;
   padding: $spacing-sm $spacing-md;
@@ -159,10 +215,6 @@
   }
 }
 
-.submitButton:disabled {
-  opacity: 0.5;
-}
-
 .emptyState {
   text-align: center;
   padding: $spacing-xl 0;
@@ -170,5 +222,176 @@
 
 .emptyText {
   font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.noSessionBar {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+  padding: $spacing-xxl $page-padding;
+  margin: 0 (-$page-padding);
+  margin-bottom: $spacing-lg;
+  text-align: center;
+  border-radius: $radius-lg;
+}
+
+.noSessionTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+  margin-bottom: $spacing-sm;
+  display: block;
+}
+
+.noSessionDesc {
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: $spacing-lg;
+  display: block;
+}
+
+.newSessionBtn {
+  @include button-reset;
+  display: inline-block;
+  padding: 0 $spacing-xl;
+  height: $button-height-lg;
+  background: $color-text-white;
+  border-radius: $radius-button;
+  color: $color-primary;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.2);
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+}
+
+.sessionSheet {
+  background: $color-bg-card;
+  border-radius: $radius-lg $radius-lg 0 0;
+  padding: $spacing-lg $page-padding;
+  padding-bottom: calc(#{$spacing-lg} + env(safe-area-inset-bottom));
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.sheetHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-lg;
+}
+
+.sheetTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.sheetClose {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: $radius-round;
+  background: $color-bg-card-deep;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sheetCloseText {
+  font-size: 32rpx;
+  color: $color-text-tertiary;
+  line-height: 1;
+}
+
+.formRow {
+  margin-bottom: $spacing-lg;
+}
+
+.formLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-sm;
+  display: block;
+}
+
+.formInput {
+  width: 100%;
+  height: $button-height-md;
+  background: $color-bg-input;
+  border: 1rpx solid $color-border;
+  border-radius: $radius-md;
+  padding: 0 $spacing-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  box-sizing: border-box;
+}
+
+.sheetPrimaryBtn {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-button;
+  color: $color-text-white;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  margin-top: $spacing-md;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.sheetListTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin: $spacing-lg 0 $spacing-md;
+}
+
+.sessionListItem {
+  background: $color-bg-card-deep;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  margin-bottom: $spacing-sm;
+  border: 2rpx solid transparent;
+
+  &.active {
+    border-color: $color-primary;
+    background: linear-gradient(135deg, rgba(123, 47, 253, 0.1) 0%, $color-bg-card-deep 100%);
+  }
+}
+
+.sessionListRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-xs;
+}
+
+.sessionListName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.sessionListActive {
+  padding: 4rpx 12rpx;
+  background: rgba(123, 47, 253, 0.2);
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.sessionListMeta {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.sessionListMetaText {
+  font-size: $font-size-xs;
   color: $color-text-tertiary;
 }

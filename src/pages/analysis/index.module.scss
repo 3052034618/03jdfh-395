@@ -6,6 +6,61 @@
   padding-bottom: 120rpx;
 }
 
+.scopeBar {
+  margin: 0 (-$page-padding) $spacing-lg;
+  padding: $spacing-md $page-padding;
+  background: $color-bg-card;
+  border-bottom: 1rpx solid $color-border;
+}
+
+.scopeScroll {
+  white-space: nowrap;
+  margin-bottom: $spacing-sm;
+}
+
+.scopeChip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: $spacing-sm $spacing-md;
+  margin-right: $spacing-sm;
+  background: $color-bg-card-deep;
+  border-radius: $radius-md;
+  border: 2rpx solid transparent;
+  transition: all $transition-fast;
+
+  &.scopeChipActive {
+    background: rgba(123, 47, 253, 0.15);
+    border-color: $color-primary;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+.scopeChipText {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+  margin-bottom: 4rpx;
+}
+
+.scopeChipActive .scopeChipText {
+  color: $color-primary;
+}
+
+.scopeChipCount {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.scopeHint {
+  font-size: $font-size-xs;
+  color: $color-accent-cyan;
+  display: block;
+}
+
 .statsRow {
   display: flex;
   gap: $spacing-sm;

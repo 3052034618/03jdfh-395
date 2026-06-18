@@ -22,6 +22,7 @@ export type TagType = 'stay' | 'miss' | 'scare' | 'loop' | 'understand' | 'best'
 
 export interface RecordItem {
   id: string;
+  sessionId: string;
   roomId: string;
   roomName: string;
   tags: string[];
@@ -41,8 +42,17 @@ export interface RoomStats {
 
 export interface PlaySession {
   id: string;
+  name: string;
   playerName: string;
   startTime: number;
   endTime?: number;
-  records: RecordItem[];
+  isActive: boolean;
+}
+
+export interface ExportTemplate {
+  id: string;
+  name: string;
+  filterType: 'all' | 'best' | 'scare' | 'understand' | 'miss' | 'funny';
+  groupBy: 'room' | 'player' | 'tag' | 'time';
+  createdAt: number;
 }

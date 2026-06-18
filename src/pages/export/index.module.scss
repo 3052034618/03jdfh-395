@@ -3,19 +3,19 @@
 .page {
   min-height: 100vh;
   background: $color-bg-page;
-  padding-bottom: 160rpx;
+  padding-bottom: 180rpx;
 }
 
-.filterSection {
-  margin: 0 (-$page-padding);
+.topBar {
+  margin: 0 (-$page-padding) $spacing-lg;
   padding: $spacing-md $page-padding;
   background: $color-bg-card;
   border-bottom: 1rpx solid $color-border;
-  margin-bottom: $spacing-lg;
 }
 
 .filterScroll {
   white-space: nowrap;
+  margin-bottom: $spacing-sm;
 }
 
 .filterItem {
@@ -47,6 +47,44 @@
   font-weight: $font-weight-medium;
 }
 
+.groupRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-sm;
+}
+
+.groupLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  flex-shrink: 0;
+}
+
+.groupTabs {
+  display: flex;
+  gap: 8rpx;
+  background: $color-bg-card-deep;
+  border-radius: $radius-md;
+  padding: 6rpx;
+  flex: 1;
+}
+
+.groupTab {
+  flex: 1;
+  padding: 10rpx 0;
+  border-radius: $radius-sm;
+  text-align: center;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  transition: all $transition-fast;
+
+  &.active {
+    background: $color-primary;
+    color: $color-text-white;
+    font-weight: $font-weight-medium;
+  }
+}
+
 .sectionTitle {
   font-size: $font-size-md;
   font-weight: $font-weight-semibold;
@@ -61,6 +99,81 @@
   font-size: $font-size-sm;
   color: $color-text-tertiary;
   font-weight: normal;
+}
+
+.saveTplBtn {
+  font-size: $font-size-sm;
+  color: $color-accent-cyan;
+  font-weight: normal;
+}
+
+.templatesSection {
+  margin-bottom: $spacing-lg;
+}
+
+.templateList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.templateCard {
+  flex: 0 0 calc(50% - 8rpx);
+  background: $color-bg-card;
+  border: 1rpx solid $color-border;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  position: relative;
+  transition: all $transition-fast;
+
+  &:active {
+    transform: scale(0.98);
+    border-color: $color-primary;
+  }
+}
+
+.templateName {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.templateMeta {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  display: block;
+  margin-bottom: $spacing-sm;
+}
+
+.templateUseBtn {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.templateDelete {
+  position: absolute;
+  top: 12rpx;
+  right: 12rpx;
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: $radius-round;
+  background: rgba(255, 45, 85, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:active {
+    background: rgba(255, 45, 85, 0.3);
+  }
+}
+
+.templateDeleteText {
+  font-size: 20rpx;
+  color: $color-error;
+  line-height: 1;
 }
 
 .groupSection {
@@ -204,5 +317,90 @@
 
   &:active {
     opacity: 0.8;
+  }
+}
+
+.sheetOverlay {
+  position: fixed;
+  left: 0; right: 0; top: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 999;
+  display: flex;
+  align-items: flex-end;
+}
+
+.sheetContent {
+  width: 100%;
+  background: $color-bg-card;
+  border-radius: $radius-lg $radius-lg 0 0;
+  padding: $spacing-lg $page-padding;
+  padding-bottom: calc(#{$spacing-lg} + env(safe-area-inset-bottom));
+}
+
+.sheetHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-lg;
+}
+
+.sheetTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.sheetClose {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: $radius-round;
+  background: $color-bg-card-deep;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sheetCloseText {
+  font-size: 32rpx;
+  color: $color-text-tertiary;
+  line-height: 1;
+}
+
+.formRow {
+  margin-bottom: $spacing-lg;
+}
+
+.formLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-sm;
+  display: block;
+}
+
+.formInput {
+  width: 100%;
+  height: $button-height-md;
+  background: $color-bg-input;
+  border: 1rpx solid $color-border;
+  border-radius: $radius-md;
+  padding: 0 $spacing-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  box-sizing: border-box;
+}
+
+.sheetPrimaryBtn {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-button;
+  color: $color-text-white;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  margin-top: $spacing-md;
+
+  &:active {
+    opacity: 0.9;
   }
 }
