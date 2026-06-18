@@ -10,7 +10,8 @@ interface RoomStat {
   roomId: string;
   roomName: string;
   count: number;
-  topTags: { id: string; name: string; color: string; count: number }[];
+  uniquePlayers: number;
+  topTags: { id: string; name: string; color: string; count: number; uniquePlayers: number }[];
 }
 
 const AnalysisPage: React.FC = () => {
@@ -20,77 +21,100 @@ const AnalysisPage: React.FC = () => {
     const totalRecords = records.length;
     const roomsWithRecords = new Set(records.map(r => r.roomId)).size;
     const avgPerRoom = roomsWithRecords > 0 ? (totalRecords / roomsWithRecords).toFixed(1) : '0';
+    const uniquePlayers = new Set(records.map(r => r.playerName).filter(Boolean)).size;
 
-    return { totalRecords, roomsWithRecords, avgPerRoom };
+    return { totalRecords, roomsWithRecords, avgPerRoom, uniquePlayers };
   }, [records]);
 
   const tagDistribution = useMemo(() => {
-    const counts: Record<string, number> = {};
+    const playerCounts: Record<string, Set<string>> = {};
+    const occurrenceCounts: Record<string, number> = {};
+
     records.forEach(record => {
+      const player = record.playerName || '匿名';
       record.tags.forEach(tagId => {
-        counts[tagId] = (counts[tagId] || 0) + 1;
+        occurrenceCounts[tagId] = (occurrenceCounts[tagId] || 0) + 1;
+        if (!playerCounts[tagId]) {
+          playerCounts[tagId] = new Set();
+        }
+        playerCounts[tagId].add(player);
       });
     });
 
-    const total = Object.values(counts).reduce((sum, c) => sum + c, 0);
+    const totalUniquePlayers = Object.values(playerCounts).reduce(
+      (sum, players) => sum + players.size, 0
+    );
 
     return mockTags
-      .filter(tag => counts[tag.id])
+      .filter(tag => occurrenceCounts[tag.id])
       .map(tag => ({
         id: tag.id,
         name: tag.name,
         color: tag.color,
-        count: counts[tag.id] || 0,
-        percentage: total > 0 ? Math.round((counts[tag.id] || 0) / total * 100) : 0
+        count: occurrenceCounts[tag.id] || 0,
+        uniquePlayers: playerCounts[tag.id]?.size || 0,
+        percentage: totalUniquePlayers > 0
+          ? Math.round((playerCounts[tag.id]?.size || 0) / totalUniquePlayers * 100)
+          : 0
       }))
-      .sort((a, b) => b.count - a.count);
+      .sort((a, b) => b.uniquePlayers - a.uniquePlayers);
   }, [records]);
 
   const roomRank = useMemo(() => {
     const roomStats: Record<string, RoomStat> = {};
+    const roomTagPlayers: Record<string, Record<string, Set<string>>> = {};
+    const roomTagCounts: Record<string, Record<string, number>> = {};
 
     records.forEach(record => {
+      const player = record.playerName || '匿名';
+
       if (!roomStats[record.roomId]) {
         roomStats[record.roomId] = {
           roomId: record.roomId,
           roomName: record.roomName,
           count: 0,
+          uniquePlayers: 0,
           topTags: []
         };
+        roomTagPlayers[record.roomId] = {};
+        roomTagCounts[record.roomId] = {};
       }
       roomStats[record.roomId].count += 1;
 
-      const tagCounts: Record<string, number> = {};
       record.tags.forEach(tagId => {
-        tagCounts[tagId] = (tagCounts[tagId] || 0) + 1;
+        if (!roomTagPlayers[record.roomId][tagId]) {
+          roomTagPlayers[record.roomId][tagId] = new Set();
+        }
+        roomTagPlayers[record.roomId][tagId].add(player);
+        roomTagCounts[record.roomId][tagId] = (roomTagCounts[record.roomId][tagId] || 0) + 1;
       });
     });
 
-    records.forEach(record => {
-      record.tags.forEach(tagId => {
-        const existing = roomStats[record.roomId].topTags.find(t => t.id === tagId);
-        if (existing) {
-          existing.count += 1;
-        } else {
-          const tag = getTagById(tagId);
-          if (tag) {
-            roomStats[record.roomId].topTags.push({
-              id: tagId,
-              name: tag.name,
-              color: tag.color,
-              count: 1
-            });
-          }
-        }
+    Object.keys(roomStats).forEach(roomId => {
+      const roomPlayers = new Set<string>();
+      records
+        .filter(r => r.roomId === roomId)
+        .forEach(r => roomPlayers.add(r.playerName || '匿名'));
+      roomStats[roomId].uniquePlayers = roomPlayers.size;
+
+      const tagStats = Object.entries(roomTagPlayers[roomId]).map(([tagId, players]) => {
+        const tag = getTagById(tagId);
+        return {
+          id: tagId,
+          name: tag?.name || tagId,
+          color: tag?.color || '#7B2FFD',
+          count: roomTagCounts[roomId][tagId] || 0,
+          uniquePlayers: players.size
+        };
       });
+
+      roomStats[roomId].topTags = tagStats
+        .sort((a, b) => b.uniquePlayers - a.uniquePlayers)
+        .slice(0, 3);
     });
 
     return Object.values(roomStats)
-      .map(room => ({
-        ...room,
-        topTags: room.topTags.sort((a, b) => b.count - a.count).slice(0, 3)
-      }))
-      .sort((a, b) => b.count - a.count);
+      .sort((a, b) => b.uniquePlayers - a.uniquePlayers);
   }, [records]);
 
   const handleRoomClick = (roomId: string) => {
@@ -99,14 +123,22 @@ const AnalysisPage: React.FC = () => {
     });
   };
 
+  const scareUniquePlayers = useMemo(() => {
+    const players = new Set<string>();
+    records
+      .filter(r => r.tags.some(t => t.includes('scare')))
+      .forEach(r => players.add(r.playerName || '匿名'));
+    return players.size;
+  }, [records]);
+
   return (
     <View className={styles.page}>
       <View className="page-container">
         <View className={styles.statsRow}>
           <StatCard
-            title="总记录数"
-            value={stats.totalRecords}
-            subtitle="所有试玩记录"
+            title="试玩玩家"
+            value={stats.uniquePlayers}
+            subtitle="不同玩家数"
             color="#7B2FFD"
           />
           <StatCard
@@ -119,15 +151,15 @@ const AnalysisPage: React.FC = () => {
 
         <View className={styles.statsRow}>
           <StatCard
-            title="平均每房间"
-            value={stats.avgPerRoom}
-            subtitle="问题密度"
+            title="总记录数"
+            value={stats.totalRecords}
+            subtitle="所有标注记录"
             color="#FFB020"
           />
           <StatCard
-            title="惊吓点"
-            value={records.filter(r => r.tags.some(t => t.includes('scare'))).length}
-            subtitle="有效惊吓次数"
+            title="被吓到的玩家"
+            value={scareUniquePlayers}
+            subtitle="至少1次惊吓"
             color="#FF2D55"
           />
         </View>
@@ -135,7 +167,7 @@ const AnalysisPage: React.FC = () => {
         <View className={styles.section}>
           <View className={styles.sectionTitle}>
             <View className={styles.sectionDot} />
-            <Text>问题类型分布</Text>
+            <Text>问题类型分布（按玩家去重）</Text>
           </View>
           <View className={styles.distributionCard}>
             {tagDistribution.map(item => (
@@ -146,7 +178,7 @@ const AnalysisPage: React.FC = () => {
                     <Text>{item.name}</Text>
                   </View>
                   <Text className={styles.distValue}>
-                    {item.count} 次 ({item.percentage}%)
+                    {item.uniquePlayers} 人 ({item.count}次)
                   </Text>
                 </View>
                 <View className={styles.distBar}>
@@ -190,14 +222,14 @@ const AnalysisPage: React.FC = () => {
                           color: tag.color
                         }}
                       >
-                        <Text>{tag.name}</Text>
+                        <Text>{tag.name}·{tag.uniquePlayers}人</Text>
                       </View>
                     ))}
                   </View>
                 </View>
                 <View className={styles.problemCount}>
-                  <Text className={styles.problemNumber}>{room.count}</Text>
-                  <Text className={styles.problemLabel}>个问题</Text>
+                  <Text className={styles.problemNumber}>{room.uniquePlayers}</Text>
+                  <Text className={styles.problemLabel}>人遇到</Text>
                 </View>
               </View>
             ))}

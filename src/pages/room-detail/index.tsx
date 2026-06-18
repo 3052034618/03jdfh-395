@@ -15,26 +15,43 @@ const RoomDetailPage: React.FC = () => {
   const room = useMemo(() => getRoomById(roomId), [roomId]);
   const records = useMemo(() => getRecordsByRoom(roomId), [getRecordsByRoom, roomId]);
 
+  const uniquePlayers = useMemo(() => {
+    const players = new Set<string>();
+    records.forEach(r => players.add(r.playerName || '匿名'));
+    return players.size;
+  }, [records]);
+
   const tagStats = useMemo(() => {
-    const counts: Record<string, number> = {};
+    const playerCounts: Record<string, Set<string>> = {};
+    const occurrenceCounts: Record<string, number> = {};
+
     records.forEach(record => {
+      const player = record.playerName || '匿名';
       record.tags.forEach(tagId => {
-        counts[tagId] = (counts[tagId] || 0) + 1;
+        occurrenceCounts[tagId] = (occurrenceCounts[tagId] || 0) + 1;
+        if (!playerCounts[tagId]) {
+          playerCounts[tagId] = new Set();
+        }
+        playerCounts[tagId].add(player);
       });
     });
 
-    const maxCount = Math.max(...Object.values(counts), 1);
+    const maxUnique = Math.max(
+      ...Object.values(playerCounts).map(s => s.size),
+      1
+    );
 
     return mockTags
-      .filter(tag => counts[tag.id])
+      .filter(tag => occurrenceCounts[tag.id])
       .map(tag => ({
         id: tag.id,
         name: tag.name,
         color: tag.color,
-        count: counts[tag.id] || 0,
-        percentage: Math.round((counts[tag.id] || 0) / maxCount * 100)
+        count: occurrenceCounts[tag.id] || 0,
+        uniquePlayers: playerCounts[tag.id]?.size || 0,
+        percentage: Math.round((playerCounts[tag.id]?.size || 0) / maxUnique * 100)
       }))
-      .sort((a, b) => b.count - a.count);
+      .sort((a, b) => b.uniquePlayers - a.uniquePlayers);
   }, [records]);
 
   const generateInsight = (): string => {
@@ -51,16 +68,19 @@ const RoomDetailPage: React.FC = () => {
     let insight = '';
 
     if (hasConfused && hasMiss) {
-      insight = '该房间存在较明显的理解障碍。玩家既看不懂符号提示，又容易错过关键线索。建议：1）增加符号的视觉引导；2）在线索附近增加环境暗示。';
+      const confusedPlayers = tagStats.find(t => t.id.includes('confused') || t.id.includes('understand'))?.uniquePlayers || 0;
+      insight = `该房间存在较明显的理解障碍，有 ${confusedPlayers} 位玩家看不懂符号提示或错过线索。建议：1）增加符号的视觉引导；2）在线索附近增加环境暗示。`;
     } else if (hasLoop) {
-      insight = '该房间容易让玩家迷路绕圈。可能是空间布局导向性不足，或关键路径标识不够明显。建议优化动线设计，增加方向指引。';
+      const loopPlayers = tagStats.find(t => t.id.includes('loop'))?.uniquePlayers || 0;
+      insight = `有 ${loopPlayers} 位玩家在该房间迷路绕圈。可能是空间布局导向性不足，或关键路径标识不够明显。建议优化动线设计，增加方向指引。`;
     } else if (hasScare) {
-      const scareCount = tagStats.filter(t => t.id.includes('scare')).reduce((sum, t) => sum + t.count, 0);
-      insight = `该房间惊吓效果出色，共记录 ${scareCount} 次惊吓反应。${topTag.id.includes('best') ? '被评为最佳惊吓点，可作为宣发重点素材。' : '可考虑进一步强化惊吓节奏。'}`;
+      const scarePlayers = tagStats.filter(t => t.id.includes('scare')).reduce((sum, t) => sum + t.uniquePlayers, 0);
+      insight = `该房间惊吓效果出色，有 ${scarePlayers} 位玩家产生惊吓反应。${topTag.id.includes('best') ? '被评为最佳惊吓点，可作为宣发重点素材。' : '可考虑进一步强化惊吓节奏。'}`;
     } else if (hasMiss) {
-      insight = '该房间线索容易被玩家忽略。建议将线索放置在更显眼的位置，或增加音效/光线引导玩家注意。';
+      const missPlayers = tagStats.find(t => t.id.includes('miss'))?.uniquePlayers || 0;
+      insight = `有 ${missPlayers} 位玩家错过了该房间的线索。建议将线索放置在更显眼的位置，或增加音效/光线引导玩家注意。`;
     } else {
-      insight = `该房间最突出的问题是"${topTag.name}"，共出现 ${topTag.count} 次。建议针对性优化设计。`;
+      insight = `该房间最突出的问题是"${topTag.name}"，有 ${topTag.uniquePlayers} 位玩家遇到（共 ${topTag.count} 次）。建议针对性优化设计。`;
     }
 
     return insight;
@@ -84,6 +104,10 @@ const RoomDetailPage: React.FC = () => {
           <Text className={styles.roomDesc}>{room.description}</Text>
           <View className={styles.roomMeta}>
             <View className={styles.metaItem}>
+              <Text className={styles.metaValue}>{uniquePlayers}</Text>
+              <Text className={styles.metaLabel}>位玩家</Text>
+            </View>
+            <View className={styles.metaItem}>
               <Text className={styles.metaValue}>{records.length}</Text>
               <Text className={styles.metaLabel}>总记录</Text>
             </View>
@@ -91,17 +115,13 @@ const RoomDetailPage: React.FC = () => {
               <Text className={styles.metaValue}>{tagStats.length}</Text>
               <Text className={styles.metaLabel}>问题类型</Text>
             </View>
-            <View className={styles.metaItem}>
-              <Text className={styles.metaValue}>{room.floor}F</Text>
-              <Text className={styles.metaLabel}>楼层</Text>
-            </View>
           </View>
         </View>
 
         <View className={styles.section}>
           <View className={styles.sectionTitle}>
             <View className={styles.sectionDot} />
-            <Text>问题分布</Text>
+            <Text>问题分布（按玩家去重）</Text>
           </View>
           <View className={styles.tagStats}>
             {tagStats.map(tag => (
@@ -122,8 +142,8 @@ const RoomDetailPage: React.FC = () => {
                   </View>
                 </View>
                 <View className={styles.tagCount}>
-                  <Text className={styles.tagCountNum}>{tag.count}</Text>
-                  <Text className={styles.tagCountUnit}>次</Text>
+                  <Text className={styles.tagCountNum}>{tag.uniquePlayers}</Text>
+                  <Text className={styles.tagCountUnit}>人({tag.count}次)</Text>
                 </View>
               </View>
             ))}
