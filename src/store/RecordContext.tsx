@@ -26,11 +26,12 @@ interface RecordContextType {
   deleteSession: (sessionId: string) => void;
 
   sessionRecords: RecordItem[];
+  getRecordsBySession: (sessionId: string | null) => RecordItem[];
   addRecord: (record: Omit<RecordItem, 'id' | 'timestamp' | 'sessionId'>) => void;
   setCurrentRoom: (roomId: string) => void;
   toggleTag: (tagId: string) => void;
   clearSelectedTags: () => void;
-  getRecordsByRoom: (roomId: string, sessionScope?: 'current' | 'all') => RecordItem[];
+  getRecordsByRoom: (roomId: string, sessionScope?: 'current' | 'all' | string) => RecordItem[];
   getRecordsByTag: (tagId: string, sessionScope?: 'current' | 'all') => RecordItem[];
   deleteRecord: (recordId: string) => void;
   clearAllRecords: () => void;
@@ -159,14 +160,20 @@ export const RecordProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     }
   }, [templates]);
 
-  const currentSession = useCallback((): PlaySession | null => {
+  const currentSession = useMemo<PlaySession | null>(() => {
+    if (!currentSessionId) return null;
     return sessions.find(s => s.id === currentSessionId) || null;
-  }, [sessions, currentSessionId])();
+  }, [sessions, currentSessionId]);
 
   const sessionRecords = useMemo(() => {
     if (!currentSessionId) return [];
     return records.filter(r => r.sessionId === currentSessionId);
   }, [records, currentSessionId]);
+
+  const getRecordsBySession = useCallback((sessionId: string | null): RecordItem[] => {
+    if (!sessionId) return [];
+    return records.filter(r => r.sessionId === sessionId);
+  }, [records]);
 
   const createSession = useCallback((name: string, playerName: string): PlaySession => {
     const newSession: PlaySession = {
@@ -254,10 +261,12 @@ export const RecordProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     setSelectedTags([]);
   }, []);
 
-  const getRecordsByRoom = useCallback((roomId: string, sessionScope: 'current' | 'all' = 'all') => {
+  const getRecordsByRoom = useCallback((roomId: string, sessionScope: 'current' | 'all' | string = 'all') => {
     let pool = records;
     if (sessionScope === 'current' && currentSessionId) {
       pool = records.filter(r => r.sessionId === currentSessionId);
+    } else if (sessionScope !== 'all') {
+      pool = records.filter(r => r.sessionId === sessionScope);
     }
     return pool.filter(r => r.roomId === roomId).sort((a, b) => a.timestamp - b.timestamp);
   }, [records, currentSessionId]);
@@ -314,6 +323,7 @@ export const RecordProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       deleteSession,
 
       sessionRecords,
+      getRecordsBySession,
       addRecord,
       setCurrentRoom,
       toggleTag,

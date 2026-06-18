@@ -47,6 +47,27 @@ const groupRecords = (records: RecordItem[], groupBy: GroupByType): { key: strin
   const groups: Record<string, { label: string; items: RecordItem[] }> = {};
 
   records.forEach(record => {
+    if (groupBy === 'tag') {
+      if (!record.tags || record.tags.length === 0) {
+        const key = 'other';
+        if (!groups[key]) {
+          groups[key] = { label: '其他', items: [] };
+        }
+        groups[key].items.push(record);
+      } else {
+        record.tags.forEach(tagId => {
+          const tag = getTagById(tagId);
+          const key = tag?.id || 'other';
+          const label = tag?.name || '其他';
+          if (!groups[key]) {
+            groups[key] = { label, items: [] };
+          }
+          groups[key].items.push(record);
+        });
+      }
+      return;
+    }
+
     let key = '';
     let label = '';
 
@@ -56,11 +77,6 @@ const groupRecords = (records: RecordItem[], groupBy: GroupByType): { key: strin
     } else if (groupBy === 'player') {
       key = record.playerName || '匿名';
       label = record.playerName || '匿名玩家';
-    } else if (groupBy === 'tag') {
-      const firstTag = record.tags[0];
-      const tag = firstTag ? getTagById(firstTag) : null;
-      key = tag?.id || 'other';
-      label = tag?.name || '其他';
     } else if (groupBy === 'time') {
       const d = new Date(record.timestamp);
       const dayKey = `${d.getMonth() + 1}-${d.getDate()}`;

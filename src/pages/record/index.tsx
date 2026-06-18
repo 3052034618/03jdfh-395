@@ -18,6 +18,7 @@ const RecordPage: React.FC = () => {
     currentSession,
     currentSessionId,
     sessionRecords,
+    getRecordsBySession,
     currentRoomId,
     selectedTags,
     addRecord,
@@ -132,10 +133,6 @@ const RecordPage: React.FC = () => {
     });
   };
 
-  const getSessionRecordCount = (sid: string) => {
-    return sessionRecords.length;
-  };
-
   const renderSessionSheet = () => (
     <View className={styles.sessionSheet} onClick={(e) => e.stopPropagation()}>
       <View className={styles.sheetHeader}>
@@ -174,12 +171,9 @@ const RecordPage: React.FC = () => {
         </View>
       )}
       {sessions.map((s: PlaySession) => {
-        const count = s.id === currentSessionId
-          ? sessionRecords.length
-          : getRecordsByRoom('__dummy__', 'all').length; // fallback, avoid complex calc
-        const recCount = sessions.reduce<number>((acc, _s) => {
-          return s.id === _s.id ? sessionRecords.length : acc;
-        }, 0);
+        const sessRecs = getRecordsBySession(s.id);
+        const sessCount = sessRecs.length;
+        const sessDuration = Math.floor(((s.endTime || Date.now()) - s.startTime) / 1000);
         return (
           <View
             key={s.id}
@@ -198,10 +192,10 @@ const RecordPage: React.FC = () => {
             <View className={styles.sessionListMeta}>
               <Text className={styles.sessionListMetaText}>玩家：{s.playerName}</Text>
               <Text className={styles.sessionListMetaText}>
-                {formatDuration(Math.floor(((s.endTime || Date.now()) - s.startTime) / 1000))}
+                {formatDuration(sessDuration)}
               </Text>
               <Text className={styles.sessionListMetaText}>
-                记录 {recCount || 0} 条
+                记录 {sessCount} 条
               </Text>
             </View>
           </View>

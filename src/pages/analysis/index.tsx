@@ -15,9 +15,31 @@ interface RoomStat {
   topTags: { id: string; name: string; color: string; count: number; uniquePlayers: number }[];
 }
 
+const ANALYSIS_SCOPE_KEY = 'haunted_house_analysis_scope';
+
 const AnalysisPage: React.FC = () => {
   const { records, rooms, sessions, currentSessionId } = useRecord();
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    try {
+      const saved = Taro.getStorageSync(ANALYSIS_SCOPE_KEY);
+      if (saved) {
+        setSelectedSessionId(saved === 'all' ? null : saved);
+      }
+    } catch (e) {
+      console.warn('读取分析范围失败', e);
+    }
+  }, []);
+
+  const persistScope = (sid: string | null) => {
+    setSelectedSessionId(sid);
+    try {
+      Taro.setStorageSync(ANALYSIS_SCOPE_KEY, sid === null ? 'all' : sid);
+    } catch (e) {
+      console.warn('保存分析范围失败', e);
+    }
+  };
 
   const scopeLabel = selectedSessionId === null
     ? '全部场次'
@@ -152,7 +174,7 @@ const AnalysisPage: React.FC = () => {
           <ScrollView scrollX className={styles.scopeScroll}>
             <View
               className={`${styles.scopeChip} ${selectedSessionId === null ? styles.scopeChipActive : ''}`}
-              onClick={() => setSelectedSessionId(null)}
+              onClick={() => persistScope(null)}
             >
               <Text className={styles.scopeChipText}>全部场次</Text>
               <Text className={styles.scopeChipCount}>{sessions.length}场</Text>
@@ -166,7 +188,7 @@ const AnalysisPage: React.FC = () => {
                 <View
                   key={s.id}
                   className={`${styles.scopeChip} ${isActive ? styles.scopeChipActive : ''}`}
-                  onClick={() => setSelectedSessionId(s.id)}
+                  onClick={() => persistScope(s.id)}
                 >
                   <Text className={styles.scopeChipText}>
                     {s.name}{isCurrent ? '·当前' : ''}

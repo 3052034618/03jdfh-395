@@ -10,10 +10,16 @@ import RecordItemComponent from '@/components/RecordItem';
 const RoomDetailPage: React.FC = () => {
   const router = useRouter();
   const roomId = router.params.roomId as string;
+  const sessionIdParam = (router.params.sessionId as string) || '';
   const { getRecordsByRoom } = useRecord();
 
   const room = useMemo(() => getRoomById(roomId), [roomId]);
-  const records = useMemo(() => getRecordsByRoom(roomId), [getRecordsByRoom, roomId]);
+  const records = useMemo(() => {
+    const scope = sessionIdParam && sessionIdParam !== 'null' && sessionIdParam !== 'undefined'
+      ? sessionIdParam
+      : 'all';
+    return getRecordsByRoom(roomId, scope);
+  }, [getRecordsByRoom, roomId, sessionIdParam]);
 
   const uniquePlayers = useMemo(() => {
     const players = new Set<string>();
