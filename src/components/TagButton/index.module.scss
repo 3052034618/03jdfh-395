@@ -1,0 +1,63 @@
+@use '@/styles/variables.scss' as *;
+
+.tagButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 16rpx 24rpx;
+  border-radius: $radius-md;
+  background: $color-bg-card-deep;
+  border: 2rpx solid transparent;
+  transition: all $transition-fast;
+
+  &:active {
+    transform: scale(0.96);
+    opacity: 0.9;
+  }
+
+  &.small {
+    padding: 8rpx 16rpx;
+    border-radius: $radius-sm;
+  }
+
+  &.large {
+    padding: 20rpx 32rpx;
+    border-radius: $radius-lg;
+  }
+
+  &.selected {
+    border-width: 2rpx;
+    border-style: solid;
+  }
+}
+
+.dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: $radius-round;
+  margin-right: 12rpx;
+  flex-shrink: 0;
+}
+
+.small .dot {
+  width: 12rpx;
+  height: 12rpx;
+  margin-right: 8rpx;
+}
+
+.tagText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  white-space: nowrap;
+}
+
+.small .tagText {
+  font-size: $font-size-xs;
+}
+
+.large .tagText {
+  font-size: $font-size-md;
+}
+
+.selected .tagText {
+  font-weight: $font-weight-medium;
+}

@@ -1,0 +1,169 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 40rpx;
+}
+
+.roomHeader {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+  padding: $spacing-xl $page-padding;
+  margin: 0 (-$page-padding);
+  margin-bottom: $spacing-lg;
+}
+
+.roomName {
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+  margin-bottom: $spacing-sm;
+  display: block;
+}
+
+.roomDesc {
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+}
+
+.roomMeta {
+  display: flex;
+  gap: $spacing-lg;
+  margin-top: $spacing-md;
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.metaValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+}
+
+.metaLabel {
+  font-size: $font-size-xs;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.section {
+  margin-bottom: $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.sectionDot {
+  width: 8rpx;
+  height: 24rpx;
+  background: $color-primary;
+  border-radius: $radius-xs;
+}
+
+.tagStats {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border: 1rpx solid $color-border;
+}
+
+.tagStatItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-md;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.tagInfo {
+  width: 160rpx;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  flex-shrink: 0;
+}
+
+.tagDot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: $radius-round;
+}
+
+.tagName {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.tagBarWrap {
+  flex: 1;
+  margin: 0 $spacing-md;
+}
+
+.tagBarBg {
+  height: 16rpx;
+  background: $color-bg-card-deep;
+  border-radius: $radius-round;
+  overflow: hidden;
+}
+
+.tagBarFill {
+  height: 100%;
+  border-radius: $radius-round;
+}
+
+.tagCount {
+  width: 80rpx;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.tagCountNum {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.tagCountUnit {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.insightCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border: 1rpx solid $color-border;
+  border-left: 6rpx solid $color-accent-cyan;
+}
+
+.insightTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-accent-cyan;
+  margin-bottom: $spacing-sm;
+}
+
+.insightText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.7;
+}
+
+.recordList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}

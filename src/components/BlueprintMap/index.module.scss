@@ -1,0 +1,125 @@
+@use '@/styles/variables.scss' as *;
+
+.blueprintContainer {
+  width: 100%;
+  background: $color-bg-card-deep;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  border: 1rpx solid $color-border;
+}
+
+.scrollContainer {
+  width: 100%;
+  height: 480rpx;
+}
+
+.mapWrapper {
+  position: relative;
+  width: 500rpx;
+  height: 500rpx;
+  padding: 40rpx;
+  box-sizing: border-box;
+}
+
+.gridBg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    linear-gradient(rgba(123, 47, 253, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(123, 47, 253, 0.05) 1px, transparent 1px);
+  background-size: 40rpx 40rpx;
+}
+
+.trailLine {
+  position: absolute;
+  z-index: 1;
+  border-radius: 2rpx;
+}
+
+.roomBlock {
+  position: absolute;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-md;
+  background: $color-bg-card;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: all $transition-fast;
+
+  &.selected {
+    border-width: 3rpx;
+    transform: scale(1.02);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.roomNumber {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  opacity: 0.3;
+  position: absolute;
+  top: 8rpx;
+  left: 12rpx;
+}
+
+.roomLabel {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  text-align: center;
+  padding: 0 8rpx;
+  @include text-ellipsis;
+  max-width: 90%;
+}
+
+.recordBadge {
+  position: absolute;
+  top: -10rpx;
+  right: -10rpx;
+  min-width: 36rpx;
+  height: 36rpx;
+  border-radius: $radius-round;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10rpx;
+}
+
+.badgeCount {
+  font-size: 20rpx;
+  color: $color-text-white;
+  font-weight: $font-weight-bold;
+}
+
+.legend {
+  display: flex;
+  justify-content: space-around;
+  padding: $spacing-md $spacing-lg;
+  border-top: 1rpx solid $color-border;
+  background: $color-bg-card;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.legendDot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: $radius-round;
+}
+
+.legendText {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}

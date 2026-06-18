@@ -1,0 +1,47 @@
+// ============================================
+// 鬼屋叙事路线标注器 - 暗黑神秘主题
+// ============================================
+
+// 品牌主题色：深紫色，神秘诡异感
+$color-primary: #7B2FFD;
+$color-primary-light: #9D4FFF;
+$color-primary-dark: #5A1FC0;
+
+// 功能辅助色
+$color-accent-cyan: #00F0FF; // 青色荧光，高亮警示
+$color-accent-red: #FF2D55; // 惊悚红，惊吓标记
+$color-accent-orange: #FFB020; // 警告橙
+$color-accent-green: #20D080; // 成功绿
+
+// 功能色
+$color-success: #20D080;
+$color-warning: #FFB020;
+$color-error: #FF2D55;
+$color-info: #00F0FF;
+
+// 背景色 - 暗黑主题
+$color-bg-page: #0D0D0F; // 页面背景（深黑）
+$color-bg-card: #1A1A1F; // 卡片背景
+$color-bg-card-deep: #121217; // 深层卡片
+$color-bg-hover: #252530;
+$color-bg-input: #22222A;
+
+// 文本色
+$color-text-primary: #F0F0F5;
+$color-text-secondary: #A0A0B0;
+$color-text-tertiary: #606070;
+$color-text-disabled: #404050;
+$color-text-white: #FFFFFF;
+
+// 边框色
+$color-border: #2A2A35;
+$color-border-light: #353545;
+$color-divider: #1F1F28;
+
+// 业务相关 - 标签类型色
+$tag-stay: #FFB020; // 停留过久
+$tag-miss: #00F0FF; // 错过线索
+$tag-scare: #FF2D55; // 被吓退
+$tag-loop: #7B2FFD; // 重复绕路
+$tag-understand: #20D080; // 理解断点
+$tag-best: #FFD700; // 最佳瞬间

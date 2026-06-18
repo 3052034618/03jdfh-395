@@ -1,0 +1,176 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 120rpx;
+}
+
+.statsRow {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+}
+
+.section {
+  margin-bottom: $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.sectionDot {
+  width: 8rpx;
+  height: 24rpx;
+  background: $color-primary;
+  border-radius: $radius-xs;
+}
+
+.distributionCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border: 1rpx solid $color-border;
+}
+
+.distItem {
+  margin-bottom: $spacing-md;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.distHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-xs;
+}
+
+.distLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.distDot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: $radius-round;
+}
+
+.distValue {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.distBar {
+  height: 12rpx;
+  background: $color-bg-card-deep;
+  border-radius: $radius-round;
+  overflow: hidden;
+}
+
+.distFill {
+  height: 100%;
+  border-radius: $radius-round;
+  transition: width $transition-base;
+}
+
+.roomRankList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.roomRankItem {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border: 1rpx solid $color-border;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.rankNumber {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: $radius-md;
+  background: $color-bg-card-deep;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rankNumberTop {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+}
+
+.rankText {
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+  color: $color-text-tertiary;
+}
+
+.rankNumberTop .rankText {
+  color: $color-text-white;
+}
+
+.roomInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.roomName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+  display: block;
+}
+
+.roomTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.miniTag {
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+  font-size: $font-size-xs;
+}
+
+.problemCount {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.problemNumber {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-error;
+  display: block;
+}
+
+.problemLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}

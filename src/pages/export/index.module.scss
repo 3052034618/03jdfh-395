@@ -1,0 +1,208 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 160rpx;
+}
+
+.filterSection {
+  margin: 0 (-$page-padding);
+  padding: $spacing-md $page-padding;
+  background: $color-bg-card;
+  border-bottom: 1rpx solid $color-border;
+  margin-bottom: $spacing-lg;
+}
+
+.filterScroll {
+  white-space: nowrap;
+}
+
+.filterItem {
+  display: inline-block;
+  padding: 12rpx 24rpx;
+  border-radius: $radius-button;
+  background: $color-bg-card-deep;
+  margin-right: $spacing-sm;
+  border: 1rpx solid transparent;
+  transition: all $transition-fast;
+
+  &.active {
+    background: rgba(123, 47, 253, 0.2);
+    border-color: $color-primary;
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.filterText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.active .filterText {
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.countBadge {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  font-weight: normal;
+}
+
+.groupSection {
+  margin-bottom: $spacing-lg;
+}
+
+.groupHeader {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+}
+
+.groupDot {
+  width: 8rpx;
+  height: 24rpx;
+  background: $color-primary;
+  border-radius: $radius-xs;
+}
+
+.groupTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  flex: 1;
+}
+
+.groupCount {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.recordCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-sm;
+  border: 1rpx solid $color-border;
+}
+
+.recordHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.roomName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.recordTime {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.recordNote {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.6;
+  margin-bottom: $spacing-md;
+  display: block;
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+}
+
+.recordPlayer {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-sm;
+  padding-top: $spacing-sm;
+  border-top: 1rpx solid $color-divider;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 120rpx 0;
+}
+
+.emptyIcon {
+  font-size: 80rpx;
+  margin-bottom: $spacing-md;
+  opacity: 0.3;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.exportBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, transparent 0%, $color-bg-page 30%);
+  z-index: 100;
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.exportButton {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-button;
+  color: $color-text-white;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  box-shadow: 0 8rpx 24rpx rgba(123, 47, 253, 0.4);
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+.secondaryButton {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-lg;
+  background: $color-bg-card;
+  border: 1rpx solid $color-border;
+  border-radius: $radius-button;
+  color: $color-text-secondary;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+
+  &:active {
+    opacity: 0.8;
+  }
+}

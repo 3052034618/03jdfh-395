@@ -1,0 +1,74 @@
+@use '@/styles/variables.scss' as *;
+
+.roomCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border: 2rpx solid $color-border;
+  margin-bottom: $spacing-sm;
+  transition: all $transition-fast;
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+
+  &.selected {
+    border-color: $color-primary;
+    background: linear-gradient(135deg, rgba(123, 47, 253, 0.1) 0%, $color-bg-card 100%);
+  }
+}
+
+.roomHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.roomName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.badge {
+  min-width: 40rpx;
+  height: 40rpx;
+  background: $color-primary;
+  border-radius: $radius-round;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12rpx;
+}
+
+.badgeText {
+  font-size: $font-size-xs;
+  color: $color-text-white;
+  font-weight: $font-weight-semibold;
+}
+
+.roomDesc {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-md;
+  display: block;
+}
+
+.roomFloor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.floorText {
+  font-size: $font-size-xs;
+  color: $color-accent-cyan;
+  font-weight: $font-weight-medium;
+}
+
+.orderText {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}

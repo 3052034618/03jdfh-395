@@ -1,0 +1,174 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 200rpx;
+}
+
+.header {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+  padding: $spacing-lg $page-padding;
+  margin: 0 (-$page-padding);
+  margin-bottom: $spacing-lg;
+}
+
+.playerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.playerName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-white;
+}
+
+.sessionTime {
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.currentRoom {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: $radius-md;
+  padding: $spacing-sm $spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.currentRoomLabel {
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.currentRoomName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-white;
+}
+
+.section {
+  margin-bottom: $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.sectionDot {
+  width: 8rpx;
+  height: 24rpx;
+  background: $color-primary;
+  border-radius: $radius-xs;
+}
+
+.tagGroup {
+  margin-bottom: $spacing-md;
+}
+
+.tagGroupTitle {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-sm;
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.noteInput {
+  width: 100%;
+  min-height: 160rpx;
+  background: $color-bg-input;
+  border: 1rpx solid $color-border;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  box-sizing: border-box;
+  line-height: 1.6;
+}
+
+.noteInput::placeholder {
+  color: $color-text-tertiary;
+}
+
+.timelineSection {
+  margin-top: $spacing-xl;
+}
+
+.timelineHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.timelineTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.timelineCount {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.submitBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-md $page-padding;
+  padding-bottom: calc(#{$spacing-md} + env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, transparent 0%, $color-bg-page 30%);
+  z-index: 100;
+}
+
+.submitButton {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-lg;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-button;
+  color: $color-text-white;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  box-shadow: 0 8rpx 24rpx rgba(123, 47, 253, 0.4);
+
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+}
+
+.emptyState {
+  text-align: center;
+  padding: $spacing-xl 0;
+}
+
+.emptyText {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
